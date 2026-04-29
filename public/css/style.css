@@ -1,0 +1,154 @@
+body{
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    height: 100%;
+}
+html{
+    height: 100%;
+}
+
+/*Navbar*/
+.container{
+   flex: 1;
+}
+
+.navbar{
+   height: 5rem;
+}
+
+.fa-compass{
+    font-size: 2rem;
+    color: #fe424d;
+}
+
+.nav_link{
+    font-size: 1.2rem;
+    color: #2222 !important; /*we write !important to override the default color of bootstrap links*/
+}
+.nav_link:hover{
+    color: #fe424d !important;
+}
+
+/*footer*/
+/* .f-info-links a{
+    text-decoration: none;
+    color: #222222;
+   
+
+
+}
+.f-info-links{
+    width: 100%;
+     margin:5rem 0;
+}
+
+.f-info-socials {
+    width: 100%;
+    font-size: 1.2rem;
+    margin:5rem 0;
+    align-items: center;
+}
+
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+.f-info{
+    display: flex;
+    height: 8rem;
+    background-color: #ebebeb;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;/*very important to make the links and socials in column
+} */
+
+.f-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ebebeb;
+    padding: 1.5rem 0;
+    text-align: center;
+    gap: 8px;
+}
+
+.f-info-socials,
+.f-info-links,
+.f-info-brand{
+    width: 100%;
+    margin: 6px 0;   /* SMALL margin only */
+}
+
+.f-info-socials i{
+    margin: 0 10px;
+    font-size: 1.3rem;
+}
+
+.f-info-links a{
+    text-decoration: none;
+    color: #222;
+    margin: 0 10px;
+}
+
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+
+
+/*Cards*/
+.listing-card{
+   border: none !important;
+   margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+
+}
+
+.card-body{
+    padding: 0 !important;
+}
+
+.card-text p{
+    font-weight: 400 !important;
+}
+
+.listing-link{
+    text-decoration: none !important;
+    
+}
+
+/*Card effect*/
+
+.card:hover{
+    transform: translateY(-5px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+/*btn in new.ejs*/
+.btn-dark{
+    background-color: #fe424d !important;
+    border: none !important;
+}
+
+
+.show-img{
+    height: 30vh !important;
+}
+
+.btns{
+    display: flex;
+    gap: 10px;
+}
+
+.show-card{
+    padding: 1rem !important;
+    width: 100% !important;
+}

@@ -1,0 +1,43 @@
+<%- layout("/layouts/boilerplate") %>
+<%- locals.success ? `<div class="alert alert-success">${locals.success}</div>` : '' %>
+
+<h3 class="mb-4">All Listings</h3>
+
+<a href="/listings/new" class="btn btn-dark mb-4">Create New Listing</a>
+
+<div class="row">
+
+<% for(let listing of allListings){ %>
+
+<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+
+    <div class="card h-100 shadow-sm listing-card">
+
+       <img 
+  src="<%= listing.image?.url || 'https://images.unsplash.com/photo-1501785888041-af3ef285b470' %>" 
+  class="card-img-top"
+  style="height:20rem; object-fit:cover;"
+  alt="listing_image"
+>
+
+        <div class="card-body">
+
+            <h5 class="card-title"><%= listing.title %></h5>
+
+            <p class="card-text">
+                ₹ <%= listing.price %> / night
+            </p>
+
+            <a href="/listings/<%= listing._id %>" class="btn btn-outline-dark">
+                View
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<% } %>
+
+</div>
