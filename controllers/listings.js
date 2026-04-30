@@ -1,16 +1,20 @@
-const Listing = require("../models/listing.js");
-const mongoose = require("mongoose");
+const Listing = require("../models/listing.js");//for creating listings
+const mongoose = require("mongoose");//for checking if listing id is valid
+//for handling listing routes
 module.exports.index= async(req,res)=>{
+
     
 const allListings = await Listing.find({});
 res.render ("listings/index", {allListings});
 
 }
 
+//for handling listing routes
 module.exports.renderNewForm=(req,res)=>{
     res.render("listings/new.ejs");
 }
 
+//for handling listing routes
 module.exports.showListing=async (req, res) => {
     const { id } = req.params;
 
@@ -36,23 +40,26 @@ module.exports.showListing=async (req, res) => {
     res.render("listings/show.ejs", { listing });
 }
 
-module.exports.createListing=async (req, res) => {
+//for creating listings
+module.exports.createListing = async (req, res) => {
     const newListing = new Listing(req.body.listing);
 
     newListing.owner = req.user._id;
 
-    const img = req.body.listing.image?.trim();
-
-    newListing.image = {
-        url: img || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-        filename: "default"
-    };
+    if (req.file) {
+        newListing.image = {
+            url: req.file.path,
+            filename: req.file.filename
+        };
+    }
 
     await newListing.save();
 
-    req.flash("success","Successfully created a new listing!");
+    req.flash("success", "Successfully created a new listing!");
     res.redirect("/listings");
-}
+};
+
+
 
 module.exports.renderEditForm=async(req,res)=>{
     let {id}=req.params;

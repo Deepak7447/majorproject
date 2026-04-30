@@ -8,6 +8,11 @@ const Review = require("../models/review.js");//for creating reviews for listing
 const { isLoggedIn, isOwner } = require("../middleware.js");//for checking if user is logged in before allowing them to create, edit or delete listings
 const mongoose = require("mongoose");
 const listingController = require("../controllers/listings.js");//for handling listing routes
+const multer = require("multer");//for handling file uploads
+
+const { storage } = require("../cloudConfig");
+
+const upload = multer({ storage });
 
 const validateListing = (req, res, next) => {
    const { error } = listingSchema.validate(req.body);
@@ -41,7 +46,13 @@ router.get("/new",isLoggedIn,listingController.renderNewForm);
 router.get("/:id", wrapAsync(listingController.showListing));
 
 //create route with improved error handling and validation
-router.post("/", validateListing, isLoggedIn, wrapAsync(listingController.createListing));
+router.post(
+  "/",
+  isLoggedIn,
+  upload.single("listing[image]"),
+  validateListing,
+  wrapAsync(listingController.createListing)
+);
 
 //edit route
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));

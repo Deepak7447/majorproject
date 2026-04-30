@@ -1,3 +1,12 @@
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
+
+//for loading environment variables from .env file
+console.log("SECRET from .env file:", process.env.SECRET); // Debugging line to check if .env is loaded
+console.log("process.env.SECRET:", process.env.SECRET); // Debugging line to check if .env is loaded
+
+
 process.on("uncaughtException", err => {
     console.error("UNCAUGHT:", err);
 });
@@ -108,6 +117,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));//for edit and delete routes
 app.engine('ejs',ejsMate);//for creating boilerplate ejs files for edit and new routes
 app.use(express.static(path.join(__dirname,"public")));//for serving static files like css and js
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));//for serving uploaded images
 app.use(express.json()); // for parsing JSON data in request body
 
 
