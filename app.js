@@ -159,6 +159,10 @@ app.use("/listings",listingRoutes);
 app.use("/listings/:id/reviews",require("./routes/review.js"));//for handling review routes
 app.use("/",userRouter);//for handling user routes
 
+app.get("/", (req,res)=>{
+   res.redirect("/listings");
+});
+
 
 // app.get("/testListing",wrapAsync(async (req,res)=>{
 //     let SampleListing=new Listing({
@@ -292,4 +296,8 @@ app.listen(8080,()=>{
 app.get("/clearusers", async (req,res)=>{
   await User.deleteMany({});
   res.send("users cleared");
+});
+
+app.get("/", (req,res)=>{
+   res.redirect("/listings");
 });

@@ -58,7 +58,7 @@ router.post(
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
 //update route
-router.put("/:id",validateListing, isLoggedIn, isOwner, wrapAsync(listingController.updateListing));
+router.put("/:id",validateListing, isLoggedIn, isOwner,upload.single("listing[image]"), wrapAsync(listingController.updateListing));
 
 //delete route
 router.delete("/:id",isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));

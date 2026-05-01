@@ -1,21 +1,19 @@
-const Listing = require("../models/listing.js");//for creating listings
-const mongoose = require("mongoose");//for checking if listing id is valid
-//for handling listing routes
-module.exports.index= async(req,res)=>{
+const Listing = require("../models/listing.js"); // for creating listings
+const mongoose = require("mongoose"); // for checking if listing id is valid
 
-    
-const allListings = await Listing.find({});
-res.render ("listings/index", {allListings});
+// index route
+module.exports.index = async (req, res) => {
+    const allListings = await Listing.find({});
+    res.render("listings/index", { allListings });
+};
 
-}
-
-//for handling listing routes
-module.exports.renderNewForm=(req,res)=>{
+// new form
+module.exports.renderNewForm = (req, res) => {
     res.render("listings/new.ejs");
-}
+};
 
-//for handling listing routes
-module.exports.showListing=async (req, res) => {
+// show route
+module.exports.showListing = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -23,14 +21,14 @@ module.exports.showListing=async (req, res) => {
         return res.redirect("/listings");
     }
 
-   const listing = await Listing.findById(id)
-    .populate({
-        path: "reviews",
-        populate: {
-            path: "author"
-        }
-    })
-    .populate("owner");
+    const listing = await Listing.findById(id)
+        .populate({
+            path: "reviews",
+            populate: {
+                path: "author"
+            }
+        })
+        .populate("owner");
 
     if (!listing) {
         req.flash("error", "Listing not found");
@@ -38,9 +36,9 @@ module.exports.showListing=async (req, res) => {
     }
 
     res.render("listings/show.ejs", { listing });
-}
+};
 
-//for creating listings
+// create route
 module.exports.createListing = async (req, res) => {
     const newListing = new Listing(req.body.listing);
 
@@ -59,28 +57,50 @@ module.exports.createListing = async (req, res) => {
     res.redirect("/listings");
 };
 
+// edit form
+module.exports.renderEditForm = async (req, res) => {
+    let { id } = req.params;
 
+    const listing = await Listing.findById(id);
 
-module.exports.renderEditForm=async(req,res)=>{
-    let {id}=req.params;
-    const listing=await Listing.findById(id);
-    res.render("listings/edit.ejs",{listing});
-}
+    if (!listing) {
+        req.flash("error", "Listing not found!");
+        return res.redirect("/listings");
+    }
+   let originalImageURL = listing.image.url;
+   originalImageURL = originalImageURL.replace("/upload", "/upload/h_300,w_300"); // Resize image to width of 300px for the edit form
 
-module.exports.updateListing=async(req,res)=>{
-    let {id}=req.params;
+    res.render("listings/edit.ejs", { listing, originalImageURL });
+};
 
-    await Listing.findByIdAndUpdate(id,req.body.listing,{runValidators:true,new:true});
+// update route
+module.exports.updateListing = async (req, res) => {
+    let { id } = req.params;
 
-    req.flash("success","Listing updated successfully!");
+    let listing = await Listing.findByIdAndUpdate(
+        id,
+        req.body.listing,
+        { runValidators: true, new: true }
+    );
+
+    if (req.file) {
+        let url = req.file.path;
+        let filename = req.file.filename;
+
+        listing.image = { url, filename };
+        await listing.save();
+    }
+
+    req.flash("success", "Listing updated successfully!");
     res.redirect(`/listings/${id}`);
-}
+};
 
-module.exports.destroyListing=async(req,res)=>{
-    let {id}=req.params;
+// delete route
+module.exports.destroyListing = async (req, res) => {
+    let { id } = req.params;
 
     await Listing.findByIdAndDelete(id);
 
-    req.flash("success","Listing deleted successfully!");
+    req.flash("success", "Listing deleted successfully!");
     res.redirect("/listings");
-}
+};

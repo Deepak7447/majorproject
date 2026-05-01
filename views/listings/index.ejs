@@ -5,7 +5,131 @@
 
 <a href="/listings/new" class="btn btn-dark mb-4">Create New Listing</a>
 
-<div class="row">
+<style>
+.filters{
+    display:flex;
+    gap:2.5rem;
+    align-items:center;
+    flex-wrap:wrap;
+    margin:2rem 0;
+}
+
+.filter{
+    display:flex;
+    flex-direction:column;
+    margin-right: 1rem;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor:pointer;
+    opacity:0.75;
+    transition:0.3s ease;
+}
+
+.filter:hover{
+    opacity:1;
+    transform:translateY(-2px);
+}
+
+.filter i{
+    font-size:1.5rem;
+    color:#555;
+    margin-bottom:0.4rem;
+}
+
+.filter p{
+    margin:0;
+    font-size:0.8rem;
+    color:#555;
+    font-weight:500;
+}
+
+/* toggle right side */
+.tax-toggle{
+    margin-left:auto;   /* pushes to right */
+    border:1px solid #ddd;
+    padding:0.8rem 1rem;
+    border-radius:15px;
+    background:#fff;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+
+.tax-toggle .form-check{
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    margin:0;
+}
+
+.tax-toggle label{
+    font-size:0.9rem;
+    font-weight:500;
+    color:#444;
+    cursor:pointer;
+}
+
+.tax-toggle input{
+    cursor:pointer;
+}
+
+</style>
+
+
+<div class="filters">
+<div class="filter">
+    <div><i class="fa-solid fa-fire"></i></div>
+    <p>  Trending</p>
+</div>
+<div class="filter">
+    <div><i class="fa-solid fa-bed"></i></div>
+    <p>  Rooms</p>
+</div>
+
+<div class="filter">
+    <div><i class="fa-solid fa-city"></i></div>
+    <p>Iconic Cities</p>
+</div>
+
+<div class="filter">
+    <div><i class="fa-solid fa-mountain"></i></div>
+    <p>  Mountains</p>
+</div>
+
+<div class="filter">
+    <div><i class="fa-brands fa-fort-awesome"></i></div>
+    <p>  Castles</p>
+</div>
+
+<div class="filter">
+    <div><i class="fa-solid fa-swimmer"></i></div>
+    <p>  Amazing Pool</p>
+</div>
+
+<div class="filter">
+    <div><i class="fa-solid fa-campground"></i></div>
+    <p>  Camping</p>
+</div>
+
+<div class="filter">
+    <div><i class="fa-solid fa-baseball-bat-ball"></i></div>
+    <p>  play</p>
+</div>
+
+<div class="filter">
+    <div><i class="fa-solid fa-snowflake"></i></div>
+    <p>  Arctic</p>
+</div>
+
+<div class="tax-toggle">
+    <div class="form-check-reverse form-switch">
+            <input type="checkbox" class="form-check-input" id="flexSwitchCheckDefault" role="switch">
+            <label for="flexSwitchCheckDefault" class="form-check-label">Display Total after Taxes</label>
+    </div>
+
+</div>
+
+</div>
+<div class="row mt-3">
 
 <% for(let listing of allListings){ %>
 
@@ -42,3 +166,25 @@ onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470'
 <% } %>
 
 </div>
+
+
+
+<script>
+const taxToggle = document.getElementById("flexSwitchCheckDefault");
+taxToggle.addEventListener("change", function() {
+    const listingCards = document.querySelectorAll(".listing-card");
+    listingCards.forEach(card => {
+        const priceElement = card.querySelector(".card-text");
+        const originalPrice = parseFloat(priceElement.getAttribute("data-original-price")) || parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g,""));
+        
+        if(this.checked){
+            const totalPrice = (originalPrice * 1.18).toFixed(2);
+            priceElement.textContent = `₹ ${totalPrice} / night (incl. taxes)`;
+            priceElement.setAttribute("data-original-price", originalPrice);
+        } else {
+            priceElement.textContent = `₹ ${originalPrice} / night`;
+            priceElement.removeAttribute("data-original-price");
+        }
+    });
+});
+</script>
