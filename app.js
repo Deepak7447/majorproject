@@ -32,6 +32,7 @@ const Review=require("./models/review.js");//for creating reviews for listings
 const listingRoutes=require("./routes/listing.js");//for handling listing routes
 const reviewRoutes=require("./routes/review.js");//for handling review routes
 const session=require("express-session");//for handling sessions
+const MongoStore=require("connect-mongo");//for storing sessions in MongoDB
 const flash=require("connect-flash");//for handling flash messages
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -40,7 +41,8 @@ const User=require("./models/user.js")
 
 
 const userRouter=require("./routes/user.js");//for handling user routes
-const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl=process.env.ATLASTDB_URL 
 main()
       .then(()=>{
         console.log("Connected to DB");
@@ -51,7 +53,7 @@ main()
       })
 
 async function main(){
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbUrl);
 }
 const validateListing = (req, res, next) => {
    const { error } = listingSchema.validate(req.body);
@@ -120,9 +122,18 @@ app.use(express.static(path.join(__dirname,"public")));//for serving static file
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));//for serving uploaded images
 app.use(express.json()); // for parsing JSON data in request body
 
+const store=MongoStore.create({
+    mongoUrl:dbUrl,
+    secret:"mysupersecretcode",
+    touchAfter:24*60*60
+});
 
+store.on("error",function(e){
+    console.log("error in mongo store",e);
+});
 
 const sessionOptions={
+    store:store,
     secret:"mysupersecretcode",
     resave:false,
     saveUninitialized:true,
@@ -133,7 +144,8 @@ const sessionOptions={
     }
 };
 
-app.use(session(sessionOptions));
+
+app.use(session({ ...sessionOptions, store }));
 
 app.use(flash());
 
