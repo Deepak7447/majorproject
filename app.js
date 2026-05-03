@@ -65,6 +65,8 @@ const validateListing = (req, res, next) => {
 
    next();
 };
+
+    
 // const validateListing = (req, res, next) => {
 //    const { error } = listingSchema.validate(req.body);
 //    let errorMessage = error.details.map((el)=> el.message).join(" ");
@@ -124,7 +126,7 @@ app.use(express.json()); // for parsing JSON data in request body
 
 const store=MongoStore.create({
     mongoUrl:dbUrl,
-    secret:"mysupersecretcode",
+    secret:process.env.SECRET,
     touchAfter:24*60*60
 });
 
@@ -134,7 +136,7 @@ store.on("error",function(e){
 
 const sessionOptions={
     store:store,
-    secret:"mysupersecretcode",
+    secret:process.env.SECRET,
     resave:false,
     saveUninitialized:true,
     cookie:{
