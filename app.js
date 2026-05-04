@@ -53,7 +53,10 @@ main()
       })
 
 async function main(){
-    await mongoose.connect(dbUrl);
+    await mongoose.connect(dbUrl, {
+        tls: true,
+        tlsAllowInvalidCertificates: true
+    });
 }
 const validateListing = (req, res, next) => {
    const { error } = listingSchema.validate(req.body);
@@ -162,11 +165,7 @@ app.use((req, res, next) => {
 });
 
 
-app.use((req,res,next)=>{
-    res.locals.success=req.flash("success");
-    res.locals.error=req.flash("error");
-    next();
-});
+
 
 
 app.use("/listings",listingRoutes);
