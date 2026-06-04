@@ -299,7 +299,9 @@ app.use((err,req,res,next)=>{
 //     res.send("This is a random route");
 // })
 
-
+app.get("/checkuser", (req, res) => {
+    res.send(req.user);
+});
 
 app.listen(8080,()=>{
     console.log("Server is listening on port 8080");
